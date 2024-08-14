@@ -1,6 +1,6 @@
 # Quiz App
  
-Uygulamanın dağıtılmış versiyonunu [Quiz App](caneraydemir.com)  adresinden ziyaret edebilirsiniz.
+Uygulamanın dağıtılmış versiyonunu [Quiz App](https://quiz-app-three-woad-95.vercel.app)  adresinden ziyaret edebilirsiniz.
 ## Yorum Satırları
   Tüm kodlarımda yorum satırları bulunmaktadır, böylece kodun nasıl çalıştığını anlamak ve üzerinde değişiklik yapmak daha kolay olacaktır.
 ## Özellikler
