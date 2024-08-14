@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { StateContext } from '../Provider/context'
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from "@nextui-org/react";
 
@@ -14,6 +14,14 @@ const MyAnswers = () => {
 
     // Context'ten myAnswers değerini alıyoruz
     const { myAnswers } = context;
+    const [isLoadingButton, setIsLoadingButton] = useState(false)
+    const againQuiz = async () => {
+        setIsLoadingButton(true)
+        await localStorage.setItem("startQuiz", "false")
+        await localStorage.removeItem('myAnswers')
+
+        window.location.reload()
+    }
 
     return (
         // Sayfa yapısını oluşturan div, flexbox ile hizalama yapar
@@ -45,7 +53,7 @@ const MyAnswers = () => {
             </Table>
 
             {/* Tekrar dene butonu, sayfayı yenileyerek sınavı yeniden başlatır */}
-            <Button onPress={() => window.location.reload()} className='text-white font-bold  ' size="lg" color='success'>Again Try</Button>
+            <Button isLoading={isLoadingButton} onPress={againQuiz} className='text-white font-bold  ' size="lg" color='success'>Again Try</Button>
         </div>
     )
 }

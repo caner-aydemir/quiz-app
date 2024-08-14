@@ -1,8 +1,9 @@
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import ShowAllQuestions from './components/ShowAllQuestions';
 import { StateContext } from './Provider/context';
 import MyAnswers from './components/MyAnswers';
+import StartQuiz from './components/StartQuiz';
 
 const App: React.FC = () => {
 
@@ -17,16 +18,20 @@ const App: React.FC = () => {
   const { currentQuestionIndex } = context; // Şu anki soru index'ini alır
 
   return (
+
+
     // Ana div, sayfanın içeriğini düzenlemek için kullanılır
     <div className={mainStyle}>
-      {
-        // Eğer currentQuestionIndex 10'a eşitse, yani tüm sorular bittiğinde, MyAnswers bileşenini gösterir
+      {localStorage.getItem("startQuiz") === "true" ?
         currentQuestionIndex === 10
           ?
           <MyAnswers />
           :
           // Eğer currentQuestionIndex 10'dan küçükse, ShowAllQuestions bileşenini gösterir
           <ShowAllQuestions />
+        :
+        <div className='mx-auto my-auto'><StartQuiz /></div>
+
       }
     </div>
   );

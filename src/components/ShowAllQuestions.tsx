@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react'
-import useQuestion from '../hooks/useQuestion'
-import Question from './Question'
-import { Button, Spinner } from '@nextui-org/react'
-import ProgressBar from './ProgressBar'
-import { StateContext } from '../Provider/context'
+import React, { useContext, useEffect } from 'react';
+import useQuestion from '../hooks/useQuestion';
+import Question from './Question';
+import { Button, Spinner } from '@nextui-org/react';
+import ProgressBar from './ProgressBar';
+import { StateContext } from '../Provider/context';
 
 // ShowAllQuestions bileşeni, sınavın tüm sorularını ve ilerleme durumunu görüntüler
 const ShowAllQuestions: React.FC = () => {
@@ -19,7 +19,23 @@ const ShowAllQuestions: React.FC = () => {
     }
 
     // Context'ten alınan değerler
-    const { currentQuestionIndex, timeLeft, setTimeLeft, nextQuestion, buttonDisabled } = context;
+    const { currentQuestionIndex, timeLeft, setTimeLeft, nextQuestion, buttonDisabled, myAnswers } = context;
+
+    // Sayfa kapatılırken verileri localStorage'a kaydetmek için useEffect kullanılır
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            localStorage.setItem('timeLeft', timeLeft.toString());
+            localStorage.setItem('currentQuestionIndex', currentQuestionIndex.toString());
+            localStorage.setItem('myAnswers', JSON.stringify(myAnswers));
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        // Bileşen unmount olduğunda event listener temizlenir
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [timeLeft, currentQuestionIndex, myAnswers]); // timeLeft, currentQuestionIndex, ve myAnswers değiştiğinde çalışır
 
     // Her 1 saniyede kalan süreyi azaltan bir interval ayarlanıyor
     useEffect(() => {
@@ -30,15 +46,16 @@ const ShowAllQuestions: React.FC = () => {
                 return;
             }
         }
-
         // Interval, her 1 saniyede bir timeLeft state'ini 1 azaltır
         const intervalId = setInterval(() => {
             setTimeLeft(prev => prev - 1);
         }, 1000);
 
         // Bileşen unmounted olduğunda interval temizlenir
-        return () => clearInterval(intervalId);
-    }, [timeLeft]);
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [timeLeft, question, currentQuestionIndex, nextQuestion]);
 
     // Sorular yükleniyorsa, yüklenme spinner'ı gösterilir
     if (loading) {
@@ -57,8 +74,8 @@ const ShowAllQuestions: React.FC = () => {
 
     return (
         // Soruları ve ilgili bilgileri içeren ana div
-        <div className='flex flex-col w-2/3 xs:w-full mx-auto bg-gray-900 p-10 xs:p-5 xs:shadow-xl text-white h-full shadow-md gap-y-20 xs:gap-y-5 rounded-2xl items-center border-black'>
-            <div className='w-full flex flex-col xs:h-3/4 xs:border gap-y-10'>
+        <div className='flex flex-col w-2/3 xs:w-full mx-auto bg-gray-900 p-10 xs:p-5 xs:shadow-xl text-white h-full shadow-md gap-y-20 xs:gap-y-5 rounded-2xl items-center'>
+            <div className='w-full flex flex-col xs:h-full gap-y-10 xs:gap-y-5'>
                 {/* Sınav başlığı */}
                 <p className='mx-auto text-3xl text-white font-bold'>Quiz App</p>
 
@@ -72,19 +89,19 @@ const ShowAllQuestions: React.FC = () => {
 
                 {/* Şu anki soruyu gösteren bileşen */}
                 <Question questionInfo={question[currentQuestionIndex]} />
-            </div>
 
-            <div>
-                {/* Sonraki veya Bitir butonu */}
-                <Button size="lg"
-                    isDisabled={buttonDisabled}
-                    className='text-white' color='success'
-                    onClick={() => nextQuestion(question[currentQuestionIndex])}>
-                    {currentQuestionIndex === question.length - 1 ? "Finish" : "Next"}
-                </Button>
+                <div className='mx-auto'>
+                    {/* Sonraki veya Bitir butonu */}
+                    <Button size="lg"
+                        isDisabled={buttonDisabled}
+                        className='text-white' color='success'
+                        onClick={() => nextQuestion(question[currentQuestionIndex])}>
+                        {currentQuestionIndex === question.length - 1 ? "Finish" : "Next"}
+                    </Button>
+                </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default ShowAllQuestions;
