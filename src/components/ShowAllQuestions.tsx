@@ -21,12 +21,12 @@ const ShowAllQuestions: React.FC = () => {
     // Context'ten alınan değerler
     const { currentQuestionIndex, timeLeft, setTimeLeft, nextQuestion, buttonDisabled, myAnswers } = context;
 
-    // Sayfa kapatılırken verileri localStorage'a kaydetmek için useEffect kullanılır
+    // Sayfa kapatılırken verileri sessionStroage'a kaydetmek için useEffect kullanılır
     useEffect(() => {
         const handleBeforeUnload = () => {
-            localStorage.setItem('timeLeft', timeLeft.toString());
-            localStorage.setItem('currentQuestionIndex', currentQuestionIndex.toString());
-            localStorage.setItem('myAnswers', JSON.stringify(myAnswers));
+            sessionStorage.setItem('timeLeft', timeLeft.toString());
+            sessionStorage.setItem('currentQuestionIndex', currentQuestionIndex.toString());
+            sessionStorage.setItem('myAnswers', JSON.stringify(myAnswers));
         };
 
         window.addEventListener('beforeunload', handleBeforeUnload);

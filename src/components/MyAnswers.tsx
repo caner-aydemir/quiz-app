@@ -17,8 +17,8 @@ const MyAnswers = () => {
     const [isLoadingButton, setIsLoadingButton] = useState(false)
     const againQuiz = async () => {
         setIsLoadingButton(true)
-        await localStorage.setItem("startQuiz", "false")
-        await localStorage.removeItem('myAnswers')
+        sessionStorage.setItem("startQuiz", "false")
+        sessionStorage.removeItem('myAnswers')
 
         window.location.reload()
     }

@@ -22,7 +22,7 @@ const App: React.FC = () => {
 
     // Ana div, sayfanın içeriğini düzenlemek için kullanılır
     <div className={mainStyle}>
-      {localStorage.getItem("startQuiz") === "true" ?
+      {sessionStorage.getItem("startQuiz") === "true" ?
         currentQuestionIndex === 10
           ?
           <MyAnswers />

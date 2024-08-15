@@ -56,16 +56,16 @@ export const StateProvider = ({ children }: StateProviderProps) => {
             setTimeLeft(30);
             setSelectedOption(null);
             setCurrentQuestionIndex((prev: number) => prev + 1);
-            localStorage.removeItem("timeLeft"); // Kalan süreyi localStorage'dan sil
-            localStorage.removeItem("currentQuestionIndex"); // Mevcut soru indeksini localStorage'dan sil
+            sessionStorage.removeItem("timeLeft"); // Kalan süreyi sessionStorage'dan sil
+            sessionStorage.removeItem("currentQuestionIndex"); // Mevcut soru indeksini sessionStorage'dan sil
         }
     };
 
     useEffect(() => {
-        // Sayfa yüklendiğinde localStorage'dan veri al
-        const getTimeLeft = localStorage.getItem("timeLeft");
-        const getCurrentQuestion = localStorage.getItem("currentQuestionIndex");
-        const storedAnswers = localStorage.getItem('myAnswers');
+        // Sayfa yüklendiğinde sessionStorage'dan veri al
+        const getTimeLeft = sessionStorage.getItem("timeLeft");
+        const getCurrentQuestion = sessionStorage.getItem("currentQuestionIndex");
+        const storedAnswers = sessionStorage.getItem('myAnswers');
 
         if (getTimeLeft) {
             const lastTime = parseInt(getTimeLeft, 10);
@@ -92,10 +92,10 @@ export const StateProvider = ({ children }: StateProviderProps) => {
         }
     }, []);
 
-    // Quiz'i başlatan ve localStorage'daki cevapları temizleyen fonksiyon
+    // Quiz'i başlatan ve sessionStorage'daki cevapları temizleyen fonksiyon
     const startQuizFunction = async () => {
-        await localStorage.setItem("startQuiz", "true");
-        await localStorage.removeItem('myAnswers'); // Önceki cevapları localStorage'dan sil
+        sessionStorage.setItem("startQuiz", "true");
+        sessionStorage.removeItem('myAnswers'); // Önceki cevapları sessionStorage'dan sil
         setStartQuiz(true); // Quiz'i başlat
     };
 
